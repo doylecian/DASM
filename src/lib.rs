@@ -1,15 +1,23 @@
-pub mod core;
-use core::decoder::*;
+pub mod decoders;
+
+use decoders::x86_decoder::*;
+use decoders::x86_decoder::X86Instruction::*;
+
+use decoders::decoder::Decoder;
+use decoders::decoder::Instruction;
+
 
 #[cfg(test)]
 mod tests {
+    use decoders::decoder::Instruction;
+
     use super::*;
 
     #[test]
-    fn decode_a_byte_array() {
-        let decoder = DummyDecoder;
-        let decoded: Vec<char> = decoder.decode(&[97u8, 98u8, 99u8]).iter().map(char::to_ascii_lowercase).collect();
+    fn decode_a_byte_array_x86() {
+        let decoder = X86Decoder;
+        let decoded: Vec<X86Instruction> = decoder.decode(&[0xE9, 0x90, 123]);
         println!("{:?}", decoded);
-        assert_eq!(decoded, vec!['a', 'b', 'c']);
+        assert_eq!(decoded, vec![JMP, NOP, ERR]);
     }
 }
