@@ -36,8 +36,8 @@ mod tests {
 
     #[test]
     fn disassemble_memory_region_x86() {
-        let decoder: Box<dyn Decoder<X86Instruction>> = X86Decoder::new();
-        let memory_reader: Box<dyn Memory> = DummyMemory::new();
+        let decoder = X86Decoder::new();
+        let memory_reader = DummyMemory::new();
         let disassembler = Disassembler::new(decoder, memory_reader);
 
         let result = disassembler.disassemble(0x0 .. 0x3);
