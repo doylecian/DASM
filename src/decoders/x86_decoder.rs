@@ -5,7 +5,7 @@ pub struct X86Decoder;
 
 impl Decoder<X86Instruction> for X86Decoder {
     fn decode(&self, byte_array: Vec<u8>) -> Vec<X86Instruction> {
-        byte_array.iter().map(|b| self.byte_to_instruction(b)).collect()
+        byte_array.iter().map(|b| self.byte_to_instruction(*b)).collect()
     }
 }
 
@@ -14,23 +14,28 @@ impl X86Decoder {
         Box::new(Self {})
     }
 
-    fn byte_to_instruction(&self, byte: &u8) -> X86Instruction {
-        match byte {
-            0x90 => X86Instruction::NOP,
-            0xE9 => X86Instruction::JMP,
-            _ => X86Instruction::ERR
-        }
+    fn byte_to_instruction(&self, byte: u8) -> X86Instruction {
+        _x86_byte_to_instruction(byte)
     }
     
 }
 
+impl Instruction for X86Instruction {}
 
+include!(concat!(env!("OUT_DIR"), "/x86_generated.rs"));
 
-#[derive(Debug, PartialEq)]
-pub enum X86Instruction {
-    NOP = 0x90,
-    JMP = 0xE9,
-    ERR
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn code_gen_generates_function_with_enums() {
+        assert_eq!(_x86_byte_to_instruction(0x0), X86Instruction::ADD);
+        assert_eq!(_x86_byte_to_instruction(0x1), X86Instruction::ADD);
+        assert_eq!(_x86_byte_to_instruction(0x2), X86Instruction::ADD);
+        assert_eq!(_x86_byte_to_instruction(0xE9), X86Instruction::JMP);
+        assert_eq!(_x86_byte_to_instruction(0x90), X86Instruction::NOP);
+    }
 }
 
-impl Instruction for X86Instruction {}

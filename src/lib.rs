@@ -1,3 +1,5 @@
+#![allow(warnings)]
+
 pub mod decoders;
 pub mod mem;
 pub mod disassembler;
