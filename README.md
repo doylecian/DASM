@@ -1,2 +1,2 @@
 # DASM
-A disassembler library written in Rust for the x86 instruction set architecture 
+A WIP disassembler lib for the x86 instruction set written in Rust 
