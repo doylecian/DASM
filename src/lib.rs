@@ -11,3 +11,5 @@ use decoders::decoder::Decoder;
 use decoders::decoder::Instruction;
 
 
+
+type Bytes = Vec<u8>;

@@ -1,10 +1,12 @@
 
+use crate::Bytes;
+
 use super::decoder::{Decoder, Instruction};
 
 pub struct X86Decoder;
 
 impl Decoder<X86Instruction> for X86Decoder {
-    fn decode(&self, byte_array: Vec<u8>) -> Vec<X86Instruction> {
+    fn decode(&self, byte_array: Bytes) -> Vec<X86Instruction> {
         byte_array.iter().map(|b| self.byte_to_instruction(*b)).collect()
     }
 }

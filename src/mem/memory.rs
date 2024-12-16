@@ -1,6 +1,8 @@
+use crate::Bytes;
+
 pub trait Memory {
-    fn read(&self, address: usize) -> Result<Vec<u8>, &str>;
-    fn write(&self, address: usize, data: usize) -> Result<(), &str>;
+    unsafe fn read(&self, address: usize) -> Result<Bytes, String>;
+    unsafe fn write(&self, address: usize, data: Bytes) -> Result<String, String>;
 }
 
 pub struct DummyMemory;
@@ -12,11 +14,11 @@ impl DummyMemory {
 }
 
 impl Memory for DummyMemory {
-    fn read(&self, address: usize) -> Result<Vec<u8>, &str> {
-       Ok(vec![0xE9])
-    }
+    unsafe fn read(&self, address: usize) -> Result<Vec<u8>, String> {
+        Ok(vec![0x1])
+     }
 
-    fn write(&self, address: usize, data: usize) -> Result<(), &str> {
-        Ok(())
+    unsafe fn write(&self, address: usize, data: Vec<u8>) -> Result<String, String> {
+        Ok(format!("Successfully wrote {:?} to {:2X}", data, address))
     }
 }
