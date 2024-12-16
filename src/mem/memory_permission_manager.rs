@@ -26,7 +26,8 @@ impl DummyPermissionManager {
 
 impl MemoryPermissionManager for DummyPermissionManager {
     unsafe fn set_memory_access(&self, memory_region: &Range<usize>, access_level: MemoryAccessLevel) -> Result<(), String> {
-        if memory_region.start % 2 == 0 && access_level == MemoryAccessLevel::READWRITE {
+        if memory_region.start == 0xDEADBEEF && access_level == MemoryAccessLevel::READONLY {
+            println!("Got access denied");
             Err("ERROR_ACCESS_DENIED".to_owned())
         } else {
             Ok(())

@@ -18,7 +18,7 @@ pub struct Disassembler<T> {
 impl<T> Disassembler<T> {
     pub unsafe fn disassemble(&self, region: Range<usize>) -> Result<Vec<T>, String> {
         self.permission_manager
-            .set_memory_access(&region, MemoryAccessLevel::READONLY);
+            .set_memory_access(&region, MemoryAccessLevel::READONLY)?;
 
         region
             .map(|address| {
@@ -71,9 +71,8 @@ mod tests {
     });
 
     #[test]
-    fn x86_disassemble_memory_region_returns_instructions() {
+    fn x86_disassembler_memory_region_returns_instructions() {
         let result = unsafe { disassembler.disassemble(0x0..0x3) };
-        println!("{:?}", result.as_ref().unwrap());
         assert_eq!(
             result.unwrap(),
             vec![
@@ -81,6 +80,15 @@ mod tests {
                 X86Instruction::ADD,
                 X86Instruction::ADD
             ]
+        );
+    }
+
+    #[test]
+    fn disassembler_memory_region_access_denied() {
+        let result = unsafe { disassembler.disassemble(0xDEADBEEF .. 0xDEADBEEF + 1) };
+        assert_eq!(
+            result,
+            Err("ERROR_ACCESS_DENIED".to_owned())
         );
     }
 
