@@ -1,9 +1,14 @@
+use std::sync::Arc;
+
 use crate::Bytes;
 
 pub trait Memory {
     unsafe fn read(&self, address: usize) -> Result<Bytes, String>;
     unsafe fn write(&self, address: usize, data: Bytes) -> Result<String, String>;
 }
+
+pub type SharedMemory = Arc<dyn Memory + Send + Sync>;
+pub type NonSharedMemory = Box<dyn Memory>;
 
 pub struct DummyMemory;
 
