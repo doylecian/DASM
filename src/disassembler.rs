@@ -3,7 +3,7 @@ use std::{any::Any, ops::Range, sync::Arc};
 use crate::{
     decoders::{
         self,
-        decoder::{Decoder, Instruction, SharedDecoder, SupportDecoders},
+        decoder::{Decoder, Instruction, SharedDecoder},
     },
     mem::{
         memory::{Memory, SharedMemory},
@@ -163,7 +163,7 @@ mod tests {
                 X86Instruction::ADD
             ]
         );
-        
+
         assert!(disassembler_build.is_some());
     }
 }
