@@ -16,11 +16,19 @@ pub enum MemoryAccessLevel {
     READWRITE
 }
 
+pub enum SupportedMemoryPermissionManager {
+    DummyPermissionManager
+}
+
 pub struct DummyPermissionManager;
 
 impl DummyPermissionManager {
     pub fn new() -> Box<Self> {
         Box::new(Self {})
+    }
+
+    pub fn new_shared() -> Arc<Self> {
+        Arc::new(Self {})
     }
 }
 

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use crate::Bytes;
 
-pub trait Decoder<T> : Sync {
+pub trait Decoder<T> {
     fn decode(&self, byte_array: Bytes) -> Vec<T>;
 }
 

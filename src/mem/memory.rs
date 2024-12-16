@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{fmt::Debug, sync::Arc};
 
 use crate::Bytes;
 
@@ -15,6 +15,10 @@ pub struct DummyMemory;
 impl DummyMemory {
     pub fn new() -> Box<Self> {
         Box::new(Self {})
+    }
+
+    pub fn new_shared() -> Arc<Self> {
+        Arc::new(Self {})
     }
 }
 

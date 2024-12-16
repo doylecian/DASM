@@ -1,4 +1,6 @@
 
+use std::sync::Arc;
+
 use crate::Bytes;
 
 use super::decoder::{Decoder, Instruction};
@@ -14,6 +16,10 @@ impl Decoder<X86Instruction> for X86Decoder {
 impl X86Decoder {
     pub fn new() -> Box<Self> {
         Box::new(Self {})
+    }
+
+    pub fn new_shared() -> Arc<Self> {
+        Arc::new(Self {})
     }
 
     fn byte_to_instruction(&self, byte: u8) -> X86Instruction {
