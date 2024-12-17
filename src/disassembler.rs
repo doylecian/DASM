@@ -106,18 +106,12 @@ mod tests {
         X86Instruction::{self, JMP},
     };
     use once_cell::sync::Lazy;
-    use std::sync::Arc;
-
-    static DECODER: Lazy<Arc<X86Decoder>> = Lazy::new(|| Arc::new(*X86Decoder::new()));
-    static MEMORY_READER: Lazy<Arc<DummyMemory>> = Lazy::new(|| Arc::new(*DummyMemory::new()));
-    static MEMORY_PERMISSION_MANAGER: Lazy<Arc<DummyPermissionManager>> =
-        Lazy::new(|| Arc::new(*DummyPermissionManager::new()));
 
     static disassembler: Lazy<Disassembler<X86Instruction>> = Lazy::new(|| {
         Disassembler::new(
-            (*DECODER).clone(),
-            (*MEMORY_READER).clone(),
-            (*MEMORY_PERMISSION_MANAGER).clone(),
+            X86Decoder::new_shared(),
+            DummyMemory::new_shared(),
+            DummyPermissionManager::new_shared(),
         )
     });
 
