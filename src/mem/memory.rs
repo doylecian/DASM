@@ -1,11 +1,13 @@
-use std::{fmt::Debug, sync::Arc};
+use std::{fmt::Debug, ptr, sync::Arc};
 
 use crate::Bytes;
 
 pub trait Memory {
-    unsafe fn read(&self, address: usize) -> Result<Bytes, String>;
-    unsafe fn write(&self, address: usize, data: Bytes) -> Result<String, String>;
+    unsafe fn read(&self, address: usize, bytes_to_read: usize) -> Bytes;
+    unsafe fn write(&self, address: usize, data: Bytes);
 }
+
+
 
 pub type SharedMemory = Arc<dyn Memory + Send + Sync>;
 pub type NonSharedMemory = Box<dyn Memory>;
@@ -23,11 +25,13 @@ impl DummyMemory {
 }
 
 impl Memory for DummyMemory {
-    unsafe fn read(&self, address: usize) -> Result<Vec<u8>, String> {
-        Ok(vec![0x1])
+    unsafe fn read(&self, address: usize, bytes_to_read: usize) -> Bytes {
+        vec![0x1, 0x2, 0x3]
      }
 
-    unsafe fn write(&self, address: usize, data: Vec<u8>) -> Result<String, String> {
-        Ok(format!("Successfully wrote {:?} to {:2X}", data, address))
+    unsafe fn write(&self, address: usize, data: Bytes) {
+        format!("Successfully wrote {:?} to {:2X}", data, address);
     }
 }
+
+

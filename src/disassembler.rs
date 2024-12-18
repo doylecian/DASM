@@ -69,15 +69,12 @@ impl<T> Disassembler<T> {
     pub unsafe fn disassemble(&self, region: Range<usize>) -> Result<Vec<T>, String> {
         self.permission_manager
             .set_memory_access(&region, MemoryAccessLevel::READONLY)?;
+        
+        let bytes = self.memory_reader.read(region.start, region.len());
 
-        region
-            .map(|address| {
-                self.memory_reader
-                    .read(address)
-                    .map(|bytes| self.decoder.decode(bytes))
-            })
-            .collect::<Result<Vec<_>, _>>()
-            .map(|instructions| instructions.into_iter().flatten().collect())
+        let decoded_instructions = self.decoder.decode(bytes);
+
+        Ok(decoded_instructions)
     }
 
     pub fn new(
