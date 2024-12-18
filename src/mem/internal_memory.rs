@@ -50,8 +50,9 @@ mod test {
     }
 
     #[test]
-    fn read_heap_allocated_struct() {
+    fn read_heap_allocated_struct_reconstructable() {
         #[repr(packed(4))]
+        #[derive(Debug, PartialEq)]
         struct HeapAllocatedStruct {
             some_4_byte_integer_field: i32,
             some_8_byte_integer_field: i64,
@@ -69,5 +70,10 @@ mod test {
         assert_eq!(&bytes_read_from_heap[0..4], 1234_i32.to_le_bytes());
         assert_eq!(&bytes_read_from_heap[4..12], 4321_i64.to_le_bytes());
         assert_eq!(bytes_read_from_heap[12], 1);
+
+        let bytes_read_array: [u8; 16]  = bytes_read_from_heap.try_into().unwrap();
+        let reconstructed_struct = unsafe { core::mem::transmute::<_, HeapAllocatedStruct>(bytes_read_array) };
+
+        assert_eq!(allocated_struct, reconstructed_struct);
     }
 }
